@@ -34,5 +34,14 @@ var Tools={
         ctx.fillStyle = "#fff";
         ctx.fillRect(x+60, y+40, 80, 20);            
         ctx.strokeRect(x-9, y-9, 220, 120);
+    },
+    DrawImage: function(ctx,src){
+        var loadImage = function () {
+            ctx.drawImage(this, 0, 0);
+        };
+
+        var img = new Image();
+        img.onload = loadImage;
+        img.src = src;
     }
 };
