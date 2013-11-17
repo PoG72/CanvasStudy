@@ -1,5 +1,9 @@
 var Tools={
-    BackGroundGrid: function(ctx,width,height){
+    pushHtml: function(html){
+        $('#container').append(html);
+    },
+    backGroundGrid: function(ctx,width,height){
+        ctx.fillStyle = "#FF2A00";
         for (var i = 0; i < width; i = i + 20) {
             ctx.beginPath();
             ctx.lineWidth = 1;
@@ -23,7 +27,7 @@ var Tools={
                 ctx.fillText(i,0,i);
         }
     },
-    SwitzerlandFlag: function(ctx,x,y){
+    switzerlandFlag: function(ctx,x,y){
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#ccc";
@@ -35,7 +39,7 @@ var Tools={
         ctx.fillRect(x+60, y+40, 80, 20);            
         ctx.strokeRect(x-9, y-9, 220, 120);
     },
-    DrawImage: function(ctx,src){
+    drawImage: function(ctx,src){
         var loadImage = function () {
             ctx.drawImage(this, 0, 0);
         };
@@ -43,5 +47,39 @@ var Tools={
         var img = new Image();
         img.onload = loadImage;
         img.src = src;
+    },
+    launcher:function(firstOnly){
+        var all = ['nsAnimation'
+            , 'nsKeyBoardPaint'
+            ,'nsPaint'
+            ,'nsClip'
+            ,'nsCompositeOperation'
+            ,'nsAlpha'
+            ,'nsShadow'
+            ,'nsText'
+            ,'nsMario'
+            ,'nsPattern'
+            ,'nsWritePixel'
+            ,'nsReadPixel'
+            ,'nsCreatePixel'
+            ,'nsDrawImage'
+            ,'nsTransform'
+            ,'nsGradient'
+            ,'nsLine'
+            ,'nsHouse'
+            ,'nsTriangle'
+            ,'nsSwitzerlandFlag'
+            ,'nsRedRectangle'];
+
+        if(firstOnly)
+            all = [all[0]];
+        else
+            all.reverse();
+        for(var index in all){
+            (function(i){
+                var toDo = function(){eval(all[i] + '.doIt()');};
+                setTimeout(toDo,100*i);
+            })(index);
+        }
     }
 };
