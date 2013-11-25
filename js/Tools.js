@@ -1,4 +1,12 @@
 var Tools={
+    requestAnimationFrame: function(){
+      return window.requestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.mozRequestAnimationFrame
+        || window.oRequestAnimationFrame
+        || window.msRequestAnimationFrame
+        || function(callback, element){window.setTimeout(callback,1000/60);};
+    },
     pushHtml: function(html){
         $('#container').append(html);
     },
@@ -49,7 +57,9 @@ var Tools={
         img.src = src;
     },
     launcher:function(firstOnly){
-        var all = ['nsAnimation'
+        var all = ['nsCanvasVideo'
+            ,'nsRequestAnimationFrame'
+            ,'nsAnimation'
             , 'nsKeyBoardPaint'
             ,'nsPaint'
             ,'nsClip'

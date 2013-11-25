@@ -1,3 +1,96 @@
+var nsCanvasVideo = {
+    ctx1: null,
+    ctx2: null,
+    canvas1: null,
+    canvas2: null,
+    inter: 0,
+    video: null,
+    doIt: function () {
+        var id = 'nsCanvasVideo';
+
+        var html = '<video id="video" width="640" height="360" >'
+        html += '<source src="vid/VID_20130927_164911.mp4" type="video/mp4">';
+        html += '</video>';
+        html += '<div>';
+        html += '<canvas id="' + id + '1" width="320" height="180" >Canvas not supported</canvas>';
+        html += '<canvas id="' + id + '2" width="320" height="180" >Canvas not supported</canvas>';
+        html += '</div>';
+        html += '<input type="button" value="Play" onclick="video.play();">';
+        html += '<input type="button" value="Pause" onclick="video.pause();">';
+        html += '<input type="button" value="Stop" onclick="video.currentTime=0; video.pause();">';
+        Tools.pushHtml(html);
+
+        nsCanvasVideo.canvas1 = document.getElementById(id+'1');
+        nsCanvasVideo.canvas2 = document.getElementById(id+'2');
+        if (nsCanvasVideo.canvas1.getContext && nsCanvasVideo.canvas2.getContext) {
+            nsCanvasVideo.ctx1 = nsCanvasVideo.canvas1.getContext('2d');
+            nsCanvasVideo.ctx2 = nsCanvasVideo.canvas2.getContext('2d');
+            nsCanvasVideo.main();
+        }
+    },
+    main: function () {
+        nsCanvasVideo.video = document.getElementById('video');
+        nsCanvasVideo.ctx1.scale(0.5,0.5);
+        nsCanvasVideo.ctx2.translate(-nsCanvasVideo.video.width/4,-nsCanvasVideo.video.height/4);
+        nsCanvasVideo.inter = setInterval(nsCanvasVideo.drawVideo,40);
+    },
+    drawVideo: function () {
+        if(!isNaN(nsCanvasVideo.video.duration)){
+            nsCanvasVideo.ctx1.drawImage(nsCanvasVideo.video,0,0)
+            nsCanvasVideo.ctx2.drawImage(nsCanvasVideo.video,0,0,nsCanvasVideo.video.width,nsCanvasVideo.video.height);
+        }
+    }
+};
+
+var nsRequestAnimationFrame = {
+    ctx: null,
+    canvas: null,
+    index: 0,
+    doIt: function () {
+        var id = 'nsRequestAnimationFrame';
+
+        var html = '<canvas id="' + id + '" width="640" height="480" >Canvas not supported</canvas>';
+        Tools.pushHtml(html);
+
+        nsRequestAnimationFrame.canvas = document.getElementById(id);
+        if (nsRequestAnimationFrame.canvas.getContext) {
+            nsRequestAnimationFrame.ctx = nsRequestAnimationFrame.canvas.getContext('2d');
+            nsRequestAnimationFrame.main();
+        }
+    },
+    main: function () {
+        nsRequestAnimationFrame.ctx.lineWidth = 5;
+        nsRequestAnimationFrame.ctx.strokeStyle = 'rgba(206,0,0,255';
+        nsRequestAnimationFrame.ctx.shadowOffsetX = 0;
+        nsRequestAnimationFrame.ctx.shadowOffsetY = 0;
+        nsRequestAnimationFrame.ctx.shadowBlur = 15;
+        nsRequestAnimationFrame.ctx.shadowColor = '#000';
+
+        nsRequestAnimationFrame.ctx.translate(nsRequestAnimationFrame.canvas.width / 2, nsRequestAnimationFrame.canvas.height / 2);
+        nsRequestAnimationFrame.index = 0;
+
+        window.requestAnima = Tools.requestAnimationFrame();
+
+        nsRequestAnimationFrame.draw();
+    },
+    draw: function () {
+        nsRequestAnimationFrame.ctx.translate(3, 1);
+        nsRequestAnimationFrame.ctx.rotate(0.2);
+        nsRequestAnimationFrame.ctx.beginPath();
+        nsRequestAnimationFrame.ctx.moveTo(0, nsRequestAnimationFrame.index)
+        nsRequestAnimationFrame.ctx.lineTo(nsRequestAnimationFrame.index + 1, nsRequestAnimationFrame.index);
+        nsRequestAnimationFrame.ctx.lineTo(nsRequestAnimationFrame.index, nsRequestAnimationFrame.index + 10);
+        nsRequestAnimationFrame.ctx.closePath();
+        nsRequestAnimationFrame.ctx.stroke();
+        //nsRequestAnimationFrame.ctx.strokeStyle = 'rgba(206,' + nsRequestAnimationFrame.index + ',0,255)';
+        nsRequestAnimationFrame.ctx.strokeStyle = 'rgba(' + nsRequestAnimationFrame.index + ',' + nsRequestAnimationFrame.index + ',' + nsRequestAnimationFrame.index + ',255)';
+        //nsRequestAnimationFrame.ctx.strokeStyle = 'rgba(255-' + nsRequestAnimationFrame.index + ',255-' + nsRequestAnimationFrame.index + ',255-' + nsRequestAnimationFrame.index + ',255)';
+        nsRequestAnimationFrame.index++;
+
+        requestAnima(nsRequestAnimationFrame.draw);
+    }
+};
+
 var nsAnimation = {
     ctx: null,
     canvas: null,
@@ -19,18 +112,18 @@ var nsAnimation = {
         nsAnimation.ctx.lineWidth = 2;
         nsAnimation.ctx.fillStyle = 'rgba(206,0,0,255';
 
-        nsAnimation.ctx.translate(nsAnimation.canvas.width/2, nsAnimation.canvas.height/2);
+        nsAnimation.ctx.translate(nsAnimation.canvas.width / 2, nsAnimation.canvas.height / 2);
         nsAnimation.index = 0;
-        nsAnimation.inter = setInterval(nsAnimation.draw,10);
+        nsAnimation.inter = setInterval(nsAnimation.draw, 10);
     },
-    draw: function(){
-        nsAnimation.ctx.translate(4,1);
+    draw: function () {
+        nsAnimation.ctx.translate(4, 1);
         nsAnimation.ctx.rotate(0.2);
-        nsAnimation.ctx.fillRect(nsAnimation.index,0,20,20);
+        nsAnimation.ctx.fillRect(nsAnimation.index, 0, 20, 20);
         nsAnimation.index++;
-        if(nsAnimation.index > 400)
+        if (nsAnimation.index > 400)
             clearInterval(nsAnimation.inter);
-        nsAnimation.ctx.fillStyle = 'rgba(206,0,'+nsAnimation.index+',255)';
+        nsAnimation.ctx.fillStyle = 'rgba(206,0,' + nsAnimation.index + ',255)';
 
         nsAnimation.ctx.stroke();
     }
@@ -105,7 +198,7 @@ var nsKeyBoardPaint = {
                 }
                 break;
         }
-        nsKeyBoardPaint.ctx.lineTo(nsKeyBoardPaint.x,nsKeyBoardPaint.y);
+        nsKeyBoardPaint.ctx.lineTo(nsKeyBoardPaint.x, nsKeyBoardPaint.y);
         nsKeyBoardPaint.ctx.stroke();
     }
 };
